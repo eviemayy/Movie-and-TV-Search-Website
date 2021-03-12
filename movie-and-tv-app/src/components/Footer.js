@@ -9,7 +9,8 @@ import styled from '@emotion/styled/macro';
 const Foot = styled.footer`
     padding: 10px;
     font-size: 12px;
-    background-color: #ffffff;
+    background-color: #243447;
+    color: #ffffff;
     height: 80px;
 `;
 
