@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import MovieSearchPage from "./pages/MovieSearchPage";
 import TvSearchPage from './pages/TvSearchPage';
 import Oops from './pages/Oops';
+import MovieResults from './pages/MovieResults';
 
 
 const globalStyles = css`
@@ -32,11 +33,14 @@ function App() {
       <Global styles={globalStyles} />
       <NavigationBar />
       <Switch>
-        <Route path="/movies">
+        <Route exact path="/movies">
           <MovieSearchPage query={useQueryString().q} />
         </Route>
         <Route path="/tv">
           <TvSearchPage />
+        </Route>
+        <Route path="/movies/results">
+          <MovieResults query={useQueryString().q} />
         </Route>
         <Route exact path="/">
           <Home />
