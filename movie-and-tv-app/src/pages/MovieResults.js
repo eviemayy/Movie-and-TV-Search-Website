@@ -4,28 +4,37 @@
 import { jsx } from '@emotion/react';
 import styled from '@emotion/styled/macro';
 
-import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
-//import { getMovie } from '../components/getMovie';
+import { useState, useEffect } from 'react';
+//import { useHistory } from 'react-router-dom';
 
 const Page = styled.div`
     background-color: #2f445e;
     padding: 50px;
     margin: 0px;
     min-height: calc(100vh - 70px);
+
+    .results-container{
+        margin: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .results-text-container{
+        width: 50%;
+        margin: 5px;
+        padding: 10px;
+    }
 `;
 
-const Form = styled.form`
 
-`;
-
-function MovieSearchPage({ query }) {
-    const [inputQuery, setInputQuery] = useState(query || "");
-    //const [isError, setIsError] = useState(false);
-    const history = useHistory();
+function MovieResults({ query }) {
+    //const [inputQuery, setInputQuery] = useState(query || "");
+    const [isError, setIsError] = useState(false);
+    const [movie, setMovie] = useState({});
+    //const history = useHistory();
 
 
-    /*useEffect(() => {
+    useEffect(() => {
         let ignore = false;
         var APIKEY = "3ebf31f";
         const controller = new AbortController();
@@ -53,10 +62,11 @@ function MovieSearchPage({ query }) {
                 //response will contain a parsed json
                 console.log("if (!ignore)");
                 //setWeather(responseBody.list || []);
-                setInputQuery("");
+                //setInputQuery("");
                 setIsError(false);
                 console.log("response body: ", responseBody);
                 console.log("body.title: ", responseBody.Title);
+                setMovie(responseBody);
 
             }
 
@@ -64,7 +74,7 @@ function MovieSearchPage({ query }) {
 
         if (query) {
             console.log("if (query)");
-            //fetchMovieData();
+            fetchMovieData();
         }
 
         //cleanup function
@@ -74,24 +84,27 @@ function MovieSearchPage({ query }) {
         };
 
     }, [query]);
-    console.log(isError);*/
+    console.log(isError);
 
 
     return (
         <Page>
-            <h1>Search Movies</h1>
-            <Form onSubmit={(e) => {
-                e.preventDefault();
-                history.push(`/movies/results?q=${inputQuery}`);
-            }}>
-                <label>Movie Title*</label><br />
-                <input value={inputQuery} onChange={e => setInputQuery(e.target.value)} ></input><br />
-                <button type="submit">Submit</button>
-            </Form>
-            <p>* required</p>
-        </Page>
+            <div className="results-container">
+                <div className="results-text-container">
+                    <h1>{movie.Title}</h1>
+                    <p>Release date:  {movie.Released}</p>
+                    <p>Rating:  {movie.Rated}</p>
+                    <p>Runtime:  {movie.Runtime}</p>
+                    <p>Genre:  {movie.Genre}</p>
+                    <p>Director:  {movie.Director}</p>
+                    <p>Writer:  {movie.Writer}</p>
+                </div>
+                <img src={movie.Poster} alt={movie.Title}></img>
 
+            </div>
+
+        </Page>
     );
 }
 
-export default MovieSearchPage;
+export default MovieResults;
