@@ -33,7 +33,7 @@ function Button(props) {
 }
 
 function InputDiv(props) {
-    //console.log("== inputDiv props:", props);
+    console.log("== inputDiv props:", props);
     const styles = css`
     margin: auto;
     width: 250px;
@@ -51,16 +51,17 @@ function InputDiv(props) {
 function TVSearchPage({query}) {
     const [inputQuery, setinputQuery] = useState(query || "");
     const [TVShow, setTVShow] = useState([]);
-    const [TVquery, setTVquery] = useState("");
+    const [displaySwitch, setDisplaySwitch] = useState(true);
 
     const history = useHistory();
     useEffect(() => {
         let ignore = false;
         const findTVShow = async (e) => {
-            let data = {};
+            let data;
             try {
                 const res = await getTVShow(query);
-                data = await res;
+                data = await res.data;
+                console.log("data:",data);
             }catch (e) {
                 if (e instanceof DOMException) {
                 console.log("HTTP request aborted");
@@ -73,8 +74,7 @@ function TVSearchPage({query}) {
             if (!ignore) {
                 console.log("== inputQuery:", query);
                 console.log("== data:", data);
-                setTVShow(data.list || []);
-                setTVquery(data.array || []);
+                setTVShow(data);
 
             }
         }
@@ -98,21 +98,43 @@ function TVSearchPage({query}) {
             <Button>Search</Button>
             </InputDiv>
         </form>
-        <h1>Results for {query}</h1>
-        <h1>Results for {TVquery.Title}</h1>
+        <h1>Results for {TVShow.Title}</h1>
+        <h1>Year:  {TVShow.Year}</h1>
         
+        <InfoDisplay
+        display={displaySwitch}
+        data={TVShow}
+        handleClick={() => setDisplaySwitch(!displaySwitch)}
+        />
         
-        {TVShow.map(show => (
-            <div>
-                        <p> {show.Title} </p>
-                        
-                        
-            </div>
-                    
-                    
-        ))}
         </Page>
     );
 }
+
+function InfoDisplay(props) {
+    let element;
+    if (props.display) {
+      element = (
+          <div>
+        <p>
+          Info:
+        </p>
+        <p>{props.data.Title}</p>
+        </div>
+      );
+    } else {
+      element = (
+        <p></p>
+      );
+    }
+    return (
+      <div>
+        {element}
+        <button onClick={props.handleClick} type="button">
+          Show Info
+        </button>
+      </div>
+    );
+  }
 
 export default TVSearchPage;
