@@ -24,6 +24,11 @@ const Container = styled.ul`
         width: 15%;
     }
 
+    .title .navLinkStyle{
+        color: #ffffff;
+        font-weight: bold;
+    }
+
     .navLinkStyle{
         color: #ffffff;
         display: block;
@@ -46,7 +51,7 @@ function NavigationBar(props) {
 
     return (
         <Container>
-            <li className="mainLinkStyle"><NavLink className="navLinkStyle" exact to="/">App Name TBD</NavLink></li>
+            <li className="mainLinkStyle title"><NavLink className="navLinkStyle" exact to="/">iWannaWatch</NavLink></li>
             <li className="mainLinkStyle"><NavLink className="navLinkStyle" to="/movies">Movies</NavLink></li>
             <li className="mainLinkStyle"><NavLink className="navLinkStyle" to="/tv">TV Shows</NavLink></li>
         </Container>
