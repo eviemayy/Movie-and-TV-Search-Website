@@ -6,6 +6,12 @@ import styled from '@emotion/styled/macro';
 
 import { useState, useEffect } from 'react';
 //import { useHistory } from 'react-router-dom';
+import {
+    Route,
+    Switch,
+    Link,
+    useRouteMatch
+} from 'react-router-dom';
 
 const Page = styled.div`
     background-color: #2f445e;
@@ -23,6 +29,31 @@ const Page = styled.div`
         width: 50%;
         margin: 5px;
         padding: 10px;
+    }
+
+    ul{
+        list-style-type: none;
+        margin: 20px;
+        padding: 0;
+        overflow: hidden;
+        align-items: center;
+        color: #ffffff;
+    }
+
+    li{
+        float: left;
+        height: 100%;
+        text-decoration: none;
+    }
+
+    a{
+        color: #ffffff;
+        display: block;
+        text-align: center;
+        font-weight: 500;
+        padding: 14px 16px;
+        text-decoration: none;
+        height: 100%;
     }
 `;
 
@@ -86,9 +117,12 @@ function MovieResults({ query }) {
     }, [query]);
     console.log(isError);
 
+    const match = useRouteMatch();
+    console.log("== match:", match);
+    const { url, path } = match;
 
-    return (
-        <Page>
+    function General() {
+        return (
             <div className="results-container">
                 <div className="results-text-container">
                     <h1>{movie.Title}</h1>
@@ -102,6 +136,57 @@ function MovieResults({ query }) {
                 <img src={movie.Poster} alt={movie.Title}></img>
 
             </div>
+        );
+    }
+
+    function Plot() {
+        return (
+            <div className="results-container">
+                <div className="results-text-container">
+                    <h1>{movie.Title}</h1>
+                    <p>Plot:  {movie.Plot}</p>
+                </div>
+                <img src={movie.Poster} alt={movie.Title}></img>
+            </div>
+        );
+    }
+
+    function Awards() {
+        return (
+            <div className="results-container">
+                <div className="results-text-container">
+                    <h1>{movie.Title}</h1>
+                    <p>Awards:  {movie.Awards}</p>
+                </div>
+                <img src={movie.Poster} alt={movie.Title}></img>
+            </div>
+        );
+    }
+
+
+    return (
+        <Page>
+            <ul>
+                <li><Link to={`${url}/general`}>General Info</Link></li>
+                <li><Link to={`${url}/plot`}>Plot</Link></li>
+                <li><Link to={`${url}/awards`}>Awards</Link></li>
+            </ul>
+            <Switch>
+                <Route path={`${path}/general`}>
+                    <General />
+                </Route>
+                <Route path={`${path}/plot`}>
+                    <Plot />
+                </Route>
+                <Route path={`${path}/awards`}>
+                    <Awards />
+                </Route>
+                <Route path={`${path}`}>
+                    <General />
+                </Route>
+            </Switch>
+
+
 
         </Page>
     );
