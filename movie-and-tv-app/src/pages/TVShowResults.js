@@ -4,7 +4,7 @@
 import { jsx } from '@emotion/react';
 import styled from '@emotion/styled/macro';
 
-import { getTVShow } from '../components/getTVShow';
+//import { getTVShow } from '../components/getTVShow';
 
 import { useState, useEffect } from 'react';
 //import { useHistory } from 'react-router-dom';
@@ -70,21 +70,21 @@ function TVShowResults({ query }) {
 
     useEffect(() => {
         let ignore = false;
-        //var APIKEY = "3ebf31f";
+        var APIKEY = "3ebf31f";
         const controller = new AbortController();
         console.log("Submitted... now searching");
 
         async function fetchTVShowData() {
-            let data = {};
+            //let data = {};
             let responseBody = {};
             setIsError(false);
 
             try {
-                const res = await getTVShow(query);
-                data = await res.data;
-                console.log("data:", data);
-                //const res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${query}`, { signal: controller.signal });
-                //responseBody = await res.json();
+                //const res = await getTVShow(query);
+                //data = await res.data;
+                //console.log("data:", data);
+                const res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${query}`, { signal: controller.signal });
+                responseBody = await res.json();
                 //data = await res.json(); //parse the body
             } catch (e) {
                 if (e instanceof DOMException) {
