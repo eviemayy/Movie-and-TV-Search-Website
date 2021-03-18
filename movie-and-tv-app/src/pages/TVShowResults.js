@@ -231,7 +231,7 @@ function TVShowResults({ query }) {
                     <AllEpDiv>
                     { TVShow.Episodes && 
                     TVShow.Episodes.map(eps => (
-                    <EpDiv>
+                    <EpDiv key={eps.Title}>
                         <h3>{eps.Title}</h3>
                         <h4>Episode: {eps.Episode}  |   Rated: {eps.imdbRating}/10</h4>
                     </EpDiv>

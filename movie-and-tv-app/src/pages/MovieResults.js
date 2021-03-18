@@ -136,6 +136,8 @@ function MovieResults({ query }) {
                 <div className="results-text-container">
                     <h1>{movie.Title}</h1>
 
+
+
                     {movie.Title !== "Movie not found" && <p>Release date:  {movie.Released}</p>}
                     {movie.Title !== "Movie not found" && <p>Rating:  {movie.Rated}</p>}
                     {movie.Title !== "Movie not found" && <p>Runtime:  {movie.Runtime}</p>}
@@ -143,7 +145,7 @@ function MovieResults({ query }) {
                     {movie.Director !== "N/A" && movie.Title !== "Movie not found" &&
                         <p>Director:  {movie.Director}</p>
                     }
-                    {movie.Title !== "Movie not found" && <p>Writer:  {movie.Writer}</p>}
+
                 </div>
                 {movie.Title !== "Movie not found" &&
                     <img src={movie.Poster} alt={movie.Title}></img>
@@ -171,6 +173,17 @@ function MovieResults({ query }) {
                 <div className="results-text-container">
                     <h1>{movie.Title}</h1>
                     <p>Awards:  {movie.Awards}</p>
+                    <br/>
+                    <p>Ratings: </p>
+                    {
+                        movie.Ratings ? movie.Ratings.map( (item) => {
+                            return(
+                            <div>
+                                <p>{item.Source}</p>
+                                <p>{item.Value}</p>
+                            </div>
+                        )}) : null
+                    }
                 </div>
                 <img src={movie.Poster} alt={movie.Title}></img>
             </div>
