@@ -6,7 +6,6 @@ import styled from '@emotion/styled/macro';
 
 import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
-//import { getMovie } from '../components/getMovie';
 
 import Button from '../components/Button';
 
@@ -29,7 +28,6 @@ const Form = styled.form`
 
 function MovieSearchPage({ query }) {
     const [inputQuery, setInputQuery] = useState(query || "");
-    //const [isError, setIsError] = useState(false);
     const history = useHistory();
 
 

@@ -1,7 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
-//import React from 'react'; dont need this anymore
 import { jsx } from '@emotion/react';
 import styled from '@emotion/styled/macro';
 
