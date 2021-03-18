@@ -5,7 +5,6 @@ import { jsx } from '@emotion/react';
 import styled from '@emotion/styled/macro';
 
 import { useState, useEffect } from 'react';
-//import { useHistory } from 'react-router-dom';
 import {
     Route,
     Switch,
@@ -44,6 +43,11 @@ const Page = styled.div`
         float: left;
         height: 100%;
         text-decoration: none;
+        color: #77CBB9;
+    }
+    li:hover{
+        color: #60a294;
+        cursor: pointer;
     }
 
     a{
@@ -59,10 +63,9 @@ const Page = styled.div`
 
 
 function MovieResults({ query }) {
-    //const [inputQuery, setInputQuery] = useState(query || "");
     const [isError, setIsError] = useState(false);
     const [movie, setMovie] = useState({});
-    //const history = useHistory();
+
 
 
     useEffect(() => {
@@ -70,6 +73,8 @@ function MovieResults({ query }) {
         var APIKEY = "3ebf31f";
         const controller = new AbortController();
         console.log("Submitted... now searching");
+
+
 
         async function fetchMovieData() {
             let responseBody = {};
@@ -89,16 +94,20 @@ function MovieResults({ query }) {
                 }
             }
 
-            if (!ignore) {
+            if (responseBody.Response === "False" || ignore) {
+                console.log("responseBody.Response " + responseBody.Response);
+                console.log("BAD REQ!!! NOT FOUND!!!");
+                setIsError(true);
+                setMovie({ Title: "Movie not found" });
+            }
+            else {
                 //response will contain a parsed json
                 console.log("if (!ignore)");
-                //setWeather(responseBody.list || []);
-                //setInputQuery("");
                 setIsError(false);
                 console.log("response body: ", responseBody);
                 console.log("body.title: ", responseBody.Title);
-                setMovie(responseBody);
 
+                setMovie(responseBody);
             }
 
         }
@@ -126,14 +135,19 @@ function MovieResults({ query }) {
             <div className="results-container">
                 <div className="results-text-container">
                     <h1>{movie.Title}</h1>
-                    <p>Release date:  {movie.Released}</p>
-                    <p>Rating:  {movie.Rated}</p>
-                    <p>Runtime:  {movie.Runtime}</p>
-                    <p>Genre:  {movie.Genre}</p>
-                    <p>Director:  {movie.Director}</p>
-                    <p>Writer:  {movie.Writer}</p>
+
+                    {movie.Title !== "Movie not found" && <p>Release date:  {movie.Released}</p>}
+                    {movie.Title !== "Movie not found" && <p>Rating:  {movie.Rated}</p>}
+                    {movie.Title !== "Movie not found" && <p>Runtime:  {movie.Runtime}</p>}
+                    {movie.Title !== "Movie not found" && <p>Genre:  {movie.Genre}</p>}
+                    {movie.Director !== "N/A" && movie.Title !== "Movie not found" &&
+                        <p>Director:  {movie.Director}</p>
+                    }
+                    {movie.Title !== "Movie not found" && <p>Writer:  {movie.Writer}</p>}
                 </div>
-                <img src={movie.Poster} alt={movie.Title}></img>
+                {movie.Title !== "Movie not found" &&
+                    <img src={movie.Poster} alt={movie.Title}></img>
+                }
 
             </div>
         );
@@ -170,6 +184,7 @@ function MovieResults({ query }) {
                 <li><Link to={`${url}/general`}>General Info</Link></li>
                 <li><Link to={`${url}/plot`}>Plot</Link></li>
                 <li><Link to={`${url}/awards`}>Awards</Link></li>
+                <li color='#77CBB9'><Link to={`/movies`} >Search</Link></li>
             </ul>
             <Switch>
                 <Route path={`${path}/general`}>

@@ -111,11 +111,11 @@ function TVShowResults({ query }) {
                     console.log("ep");
                 }
                 if(tokens[1] && tokens[2]){
-                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&type=series&season=${tokens[1]}&episode=${tokens[2]}`, { signal: controller.signal });
+                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&season=${tokens[1]}&episode=${tokens[2]}`, { signal: controller.signal });
                 }else if(tokens[1]){
-                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&type=series&season=${tokens[1]}`, { signal: controller.signal });
+                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&season=${tokens[1]}`, { signal: controller.signal });
                 }else{
-                res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&type=series`, { signal: controller.signal });
+                res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}`, { signal: controller.signal });
                 }
 
                 //res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${query}`, { signal: controller.signal });
@@ -282,7 +282,6 @@ function TVShowResults({ query }) {
                     </Route>
                     <Route path={`${path}`}>
                         <h1>Show not found.</h1>
-                        <img src={TVShow.Poster} alt={TVShow.Title}></img>
                     </Route>
                 </Switch>
             </Page>
