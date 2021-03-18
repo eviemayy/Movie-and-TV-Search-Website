@@ -44,6 +44,11 @@ const Page = styled.div`
         float: left;
         height: 100%;
         text-decoration: none;
+        color: #77CBB9;
+    }
+    li:hover{
+        color: #60a294;
+        cursor: pointer;
     }
 
     a{
@@ -126,11 +131,14 @@ function MovieResults({ query }) {
             <div className="results-container">
                 <div className="results-text-container">
                     <h1>{movie.Title}</h1>
+
                     <p>Release date:  {movie.Released}</p>
                     <p>Rating:  {movie.Rated}</p>
                     <p>Runtime:  {movie.Runtime}</p>
                     <p>Genre:  {movie.Genre}</p>
-                    <p>Director:  {movie.Director}</p>
+                    { movie.Director !== "N/A" && 
+                        <p>Director:  {movie.Director}</p>
+                    }
                     <p>Writer:  {movie.Writer}</p>
                 </div>
                 <img src={movie.Poster} alt={movie.Title}></img>
@@ -170,6 +178,7 @@ function MovieResults({ query }) {
                 <li><Link to={`${url}/general`}>General Info</Link></li>
                 <li><Link to={`${url}/plot`}>Plot</Link></li>
                 <li><Link to={`${url}/awards`}>Awards</Link></li>
+                <li color='#77CBB9'><Link to={`/movies`} >Search</Link></li>
             </ul>
             <Switch>
                 <Route path={`${path}/general`}>
