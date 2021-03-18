@@ -56,15 +56,21 @@ const Page = styled.div`
         text-decoration: none;
         height: 100%;
     }
+
+    img{
+        height: 300px;
+        max-width: 100%;
+    }
+
 `;
-const EpDiv = styled.div `
+const EpDiv = styled.div`
     margin: 5px;
     width: 225px;
     background-color: #2f445e;
     border: 2px solid grey;
     padding: 5px;
 `;
-const AllEpDiv = styled.div `
+const AllEpDiv = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -98,28 +104,28 @@ function TVShowResults({ query }) {
             try {
                 //const res = await getTVShow(query);
                 //data = await res.data;
-                console.log("queries:",query);
+                console.log("queries:", query);
                 var delims = '-';
                 var tokens = query.split(delims);
                 console.log("tokens: ", tokens);
                 var res;
-                if(tokens[1]){
+                if (tokens[1]) {
                     setSeason(true);
                 }
-                if(tokens[2]){
+                if (tokens[2]) {
                     setEpisode(true);
                     console.log("ep");
                 }
-                if(tokens[1] && tokens[2]){
+                if (tokens[1] && tokens[2]) {
                     res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&type=series&season=${tokens[1]}&episode=${tokens[2]}`, { signal: controller.signal });
-                }else if(tokens[1]){
+                } else if (tokens[1]) {
                     res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&type=series&season=${tokens[1]}`, { signal: controller.signal });
-                }else{
-                res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&type=series`, { signal: controller.signal });
+                } else {
+                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&type=series`, { signal: controller.signal });
                 }
 
                 //res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${query}`, { signal: controller.signal });
-                
+
                 responseBody = await res.json();
                 //data = await res.json(); //parse the body
             } catch (e) {
@@ -144,7 +150,7 @@ function TVShowResults({ query }) {
 
                 console.log("response body: ", responseBody);
                 console.log("body.title: ", responseBody.Title);
-                if(responseBody.Response === "False"){
+                if (responseBody.Response === "False") {
                     setFound(false);
                 }
                 setTVShow(responseBody);
@@ -172,7 +178,7 @@ function TVShowResults({ query }) {
     const { url, path } = match;
 
     function General() {
-        
+
         return (
             <div className="results-container">
                 <div className="results-text-container">
@@ -183,7 +189,7 @@ function TVShowResults({ query }) {
                     <p>Seasons:  {TVShow.totalSeasons}</p>
                     <p>Runtime:  {TVShow.Runtime}</p>
                     <p>Genre:  {TVShow.Genre}</p>
-                    { TVShow.Director !== "N/A" && 
+                    {TVShow.Director !== "N/A" &&
                         <p>Director:  {TVShow.Director}</p>
                     }
                     <p>Writer:  {TVShow.Writer}</p>
@@ -194,7 +200,7 @@ function TVShowResults({ query }) {
         );
     }
     function GeneralSE() {
-        
+
         return (
             <div className="results-container">
                 <div className="results-text-container">
@@ -205,16 +211,16 @@ function TVShowResults({ query }) {
                     <p>Rating:  {TVShow.Rated}</p>
                     <p>Runtime:  {TVShow.Runtime}</p>
                     <p>Genre:  {TVShow.Genre}</p>
-                    { TVShow.Actors !== "N/A" && 
-                    <p>Actors:  {TVShow.Actors}</p>
+                    {TVShow.Actors !== "N/A" &&
+                        <p>Actors:  {TVShow.Actors}</p>
                     }
-                    { TVShow.Director !== "N/A" && 
+                    {TVShow.Director !== "N/A" &&
                         <p>Director:  {TVShow.Director}</p>
                     }
-                    { TVShow.Writer !== "N/A" && 
-                    <p>Writer:  {TVShow.Writer}</p>
+                    {TVShow.Writer !== "N/A" &&
+                        <p>Writer:  {TVShow.Writer}</p>
                     }
-                    
+
                 </div>
                 <img src={TVShow.Poster} alt={TVShow.Title}></img>
 
@@ -222,27 +228,27 @@ function TVShowResults({ query }) {
         );
     }
     function GeneralS() {
-        
+
         return (
             <div className="results-container">
                 <div className="results-text-container">
                     <h1>{TVShow.Title}</h1>
                     <h2>Season: {TVShow.Season} of {TVShow.totalSeasons}</h2>
                     <AllEpDiv>
-                    { TVShow.Episodes && 
-                    TVShow.Episodes.map(eps => (
-                    <EpDiv key={eps.Title}>
-                        <h3>{eps.Title}</h3>
-                        <h4>Episode: {eps.Episode}  |   Rated: {eps.imdbRating}/10</h4>
-                    </EpDiv>
-                    
-                    
-                    ))}
+                        {TVShow.Episodes &&
+                            TVShow.Episodes.map(eps => (
+                                <EpDiv key={eps.Title}>
+                                    <h3>{eps.Title}</h3>
+                                    <h4>Episode: {eps.Episode}  |   Rated: {eps.imdbRating}/10</h4>
+                                </EpDiv>
+
+
+                            ))}
                     </AllEpDiv>
-                    
-                    
+
+
                 </div>
-                
+
 
             </div>
         );
@@ -271,7 +277,7 @@ function TVShowResults({ query }) {
             </div>
         );
     }
-    if(!found){
+    if (!found) {
         return (
             <Page>
                 <ul>
@@ -288,8 +294,8 @@ function TVShowResults({ query }) {
                 </Switch>
             </Page>
         );
-    
-    }else if(seasons && episodes){
+
+    } else if (seasons && episodes) {
         return (
             <Page>
                 <ul>
@@ -308,13 +314,13 @@ function TVShowResults({ query }) {
                         <GeneralSE />
                     </Route>
                 </Switch>
-    
-    
-    
+
+
+
             </Page>
         );
-    
-    } else if(seasons){
+
+    } else if (seasons) {
         return (
             <Page>
                 <ul>
@@ -354,9 +360,9 @@ function TVShowResults({ query }) {
                         <General />
                     </Route>
                 </Switch>
-    
-    
-    
+
+
+
             </Page>
         );
     }
