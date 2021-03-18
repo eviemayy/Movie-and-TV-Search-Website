@@ -274,19 +274,16 @@ function TVShowResults({ query }) {
         return (
             <Page>
                 <ul>
-                    <li><Link to={`/tv`}>Search</Link></li>
+                    <li><Link to={`/tv`}>Back</Link></li>
                 </ul>
                 <Switch>
                     <Route path={`${path}/general`}>
-                        <h1>Not found.</h1>
+                        <h1>Show not found.</h1>
                     </Route>
                     <Route path={`${path}`}>
-                        <h1>Not found.</h1>
+                        <h1>Show not found.</h1>
                     </Route>
                 </Switch>
-    
-    
-    
             </Page>
         );
     
@@ -294,9 +291,9 @@ function TVShowResults({ query }) {
         return (
             <Page>
                 <ul>
+                    <li><Link to={`/tv`}>Back</Link></li>
                     <li><Link to={`${url}/general`}>General Info</Link></li>
                     <li><Link to={`${url}/plot`}>Plot</Link></li>
-                    <li><Link to={`/tv`}>Search</Link></li>
                 </ul>
                 <Switch>
                     <Route path={`${path}/general`}>
@@ -319,8 +316,8 @@ function TVShowResults({ query }) {
         return (
             <Page>
                 <ul>
+                    <li><Link to={`/tv`}>Back</Link></li>
                     <li><Link to={`${url}/general`}>General Info</Link></li>
-                    <li><Link to={`/tv`}>Search</Link></li>
                 </ul>
                 <Switch>
                     <Route path={`${path}/general`}>
@@ -336,10 +333,10 @@ function TVShowResults({ query }) {
         return (
             <Page>
                 <ul>
+                    <li><Link to={`/tv`}>Back</Link></li>
                     <li><Link to={`${url}/general`}>General Info</Link></li>
                     <li><Link to={`${url}/plot`}>Plot</Link></li>
                     <li><Link to={`${url}/awards`}>Awards</Link></li>
-                    <li><Link to={`/tv`}>Search</Link></li>
                 </ul>
                 <Switch>
                     <Route path={`${path}/general`}>
