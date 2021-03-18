@@ -133,6 +133,7 @@ function MovieResults({ query }) {
                     <h1>{movie.Title}</h1>
 
                     <p>Release date:  {movie.Released}</p>
+                    <p>Country:  {movie.Country}</p>
                     <p>Rating:  {movie.Rated}</p>
                     <p>Runtime:  {movie.Runtime}</p>
                     <p>Genre:  {movie.Genre}</p>
@@ -140,6 +141,7 @@ function MovieResults({ query }) {
                         <p>Director:  {movie.Director}</p>
                     }
                     <p>Writer:  {movie.Writer}</p>
+                    {/* <p>IMDB Rating: {movie.imdbRating}</p> */}
                 </div>
                 <img src={movie.Poster} alt={movie.Title}></img>
 
@@ -165,6 +167,17 @@ function MovieResults({ query }) {
                 <div className="results-text-container">
                     <h1>{movie.Title}</h1>
                     <p>Awards:  {movie.Awards}</p>
+                    <br/>
+                    <p>Ratings: </p>
+                    {
+                        movie.Ratings ? movie.Ratings.map( (item) => {
+                            return(
+                            <div>
+                                <p>{item.Source}</p>
+                                <p>{item.Value}</p>
+                            </div>
+                        )}) : null
+                    }
                 </div>
                 <img src={movie.Poster} alt={movie.Title}></img>
             </div>
