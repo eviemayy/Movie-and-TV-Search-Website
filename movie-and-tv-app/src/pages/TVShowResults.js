@@ -180,6 +180,7 @@ function TVShowResults({ query }) {
                     <p>{TVShow.imdbRating}/10</p>
                     <p>Release date:  {TVShow.Released}</p>
                     <p>Rating:  {TVShow.Rated}</p>
+                    <p>Seasons:  {TVShow.totalSeasons}</p>
                     <p>Runtime:  {TVShow.Runtime}</p>
                     <p>Genre:  {TVShow.Genre}</p>
                     { TVShow.Director !== "N/A" && 
