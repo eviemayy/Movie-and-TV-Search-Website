@@ -28,7 +28,6 @@ const Page = styled.div`
     }
 
     .results-text-container{
-        width: 50%;
         margin: 5px;
         padding: 10px;
     }
@@ -58,12 +57,28 @@ const Page = styled.div`
         height: 100%;
     }
 `;
+const EpDiv = styled.div `
+    margin: 5px;
+    width: 225px;
+    background-color: #2f445e;
+    border: 2px solid grey;
+    padding: 5px;
+`;
+const AllEpDiv = styled.div `
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-flow: row wrap;
+`;
+
 
 
 function TVShowResults({ query }) {
     //const [inputQuery, setInputQuery] = useState(query || "");
     const [isError, setIsError] = useState(false);
     const [TVShow, setTVShow] = useState({});
+    const [seasons, setSeason] = useState(false);
+    const [episodes, setEpisode] = useState(false);
     //const [TVShow, setTVShow] = useState([]);
     //const history = useHistory();
 
@@ -82,8 +97,28 @@ function TVShowResults({ query }) {
             try {
                 //const res = await getTVShow(query);
                 //data = await res.data;
-                //console.log("data:", data);
-                const res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${query}`, { signal: controller.signal });
+                console.log("queries:",query);
+                var delims = '-';
+                var tokens = query.split(delims);
+                console.log("tokens: ", tokens);
+                var res;
+                if(tokens[1]){
+                    setSeason(true);
+                }
+                if(tokens[2]){
+                    setEpisode(true);
+                    console.log("ep");
+                }
+                if(tokens[1] && tokens[2]){
+                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&season=${tokens[1]}&episode=${tokens[2]}`, { signal: controller.signal });
+                }else if(tokens[1]){
+                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&season=${tokens[1]}`, { signal: controller.signal });
+                }else{
+                res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}`, { signal: controller.signal });
+                }
+
+                //res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${query}`, { signal: controller.signal });
+                
                 responseBody = await res.json();
                 //data = await res.json(); //parse the body
             } catch (e) {
@@ -133,35 +168,76 @@ function TVShowResults({ query }) {
     const { url, path } = match;
 
     function General() {
-        console.log("TV dir==", TVShow.Director);
-        if (TVShow.Director === "N/A"){
-            return (
-                <div className="results-container">
-                    <div className="results-text-container">
-                        <h1>{TVShow.Title}</h1>
-                        <p>Release date:  {TVShow.Released}</p>
-                        <p>Rating:  {TVShow.Rated}</p>
-                        <p>Runtime:  {TVShow.Runtime}</p>
-                        <p>Genre:  {TVShow.Genre}</p>
-                        <p>Writer:  {TVShow.Writer}</p>
-                    </div>
-                    <img src={TVShow.Poster} alt={TVShow.Title}></img>
-    
-                </div>
-            );
-        }
+        
         return (
             <div className="results-container">
                 <div className="results-text-container">
                     <h1>{TVShow.Title}</h1>
+                    <p>{TVShow.imdbRating}/10</p>
                     <p>Release date:  {TVShow.Released}</p>
                     <p>Rating:  {TVShow.Rated}</p>
                     <p>Runtime:  {TVShow.Runtime}</p>
                     <p>Genre:  {TVShow.Genre}</p>
-                    <p>Director:  {TVShow.Director}</p>
+                    { TVShow.Director !== "N/A" && 
+                        <p>Director:  {TVShow.Director}</p>
+                    }
                     <p>Writer:  {TVShow.Writer}</p>
                 </div>
                 <img src={TVShow.Poster} alt={TVShow.Title}></img>
+
+            </div>
+        );
+    }
+    function GeneralSE() {
+        
+        return (
+            <div className="results-container">
+                <div className="results-text-container">
+                    <h1>{TVShow.Title}</h1>
+                    <h3>Season: {TVShow.Season}, Episode: {TVShow.Episode}</h3>
+                    <p>{TVShow.imdbRating}/10</p>
+                    <p>Release date:  {TVShow.Released}</p>
+                    <p>Rating:  {TVShow.Rated}</p>
+                    <p>Runtime:  {TVShow.Runtime}</p>
+                    <p>Genre:  {TVShow.Genre}</p>
+                    { TVShow.Actors !== "N/A" && 
+                    <p>Actors:  {TVShow.Actors}</p>
+                    }
+                    { TVShow.Director !== "N/A" && 
+                        <p>Director:  {TVShow.Director}</p>
+                    }
+                    { TVShow.Writer !== "N/A" && 
+                    <p>Writer:  {TVShow.Writer}</p>
+                    }
+                    
+                </div>
+                <img src={TVShow.Poster} alt={TVShow.Title}></img>
+
+            </div>
+        );
+    }
+    function GeneralS() {
+        
+        return (
+            <div className="results-container">
+                <div className="results-text-container">
+                    <h1>{TVShow.Title}</h1>
+                    <h2>Season: {TVShow.Season} of {TVShow.totalSeasons}</h2>
+                    <AllEpDiv>
+                    { TVShow.Episodes && 
+                    TVShow.Episodes.map(eps => (
+                    <EpDiv>
+                        <h3>{eps.Title}</h3>
+                        <h4>Episode: {eps.Episode}  |   Rated: {eps.imdbRating}/10</h4>
+                    </EpDiv>
+                    
+                    
+                    ))}
+                    </AllEpDiv>
+                    
+                    
+                </div>
+                
 
             </div>
         );
@@ -191,34 +267,77 @@ function TVShowResults({ query }) {
         );
     }
 
-
-    return (
-        <Page>
-            <ul>
-                <li><Link to={`${url}/general`}>General Info</Link></li>
-                <li><Link to={`${url}/plot`}>Plot</Link></li>
-                <li><Link to={`${url}/awards`}>Awards</Link></li>
-                <li><Link to={`/tv`}>Search</Link></li>
-            </ul>
-            <Switch>
-                <Route path={`${path}/general`}>
-                    <General />
-                </Route>
-                <Route path={`${path}/plot`}>
-                    <Plot />
-                </Route>
-                <Route path={`${path}/awards`}>
-                    <Awards />
-                </Route>
-                <Route path={`${path}`}>
-                    <General />
-                </Route>
-            </Switch>
-
-
-
-        </Page>
-    );
+    if(seasons && episodes){
+        return (
+            <Page>
+                <ul>
+                    <li><Link to={`${url}/general`}>General Info</Link></li>
+                    <li><Link to={`${url}/plot`}>Plot</Link></li>
+                    <li><Link to={`/tv`}>Search</Link></li>
+                </ul>
+                <Switch>
+                    <Route path={`${path}/general`}>
+                        <GeneralSE />
+                    </Route>
+                    <Route path={`${path}/plot`}>
+                        <Plot />
+                    </Route>
+                    <Route path={`${path}`}>
+                        <GeneralSE />
+                    </Route>
+                </Switch>
+    
+    
+    
+            </Page>
+        );
+    
+    } else if(seasons){
+        return (
+            <Page>
+                <ul>
+                    <li><Link to={`${url}/general`}>General Info</Link></li>
+                    <li><Link to={`/tv`}>Search</Link></li>
+                </ul>
+                <Switch>
+                    <Route path={`${path}/general`}>
+                        <GeneralS />
+                    </Route>
+                    <Route path={`${path}`}>
+                        <GeneralS />
+                    </Route>
+                </Switch>
+            </Page>
+        );
+    } else {
+        return (
+            <Page>
+                <ul>
+                    <li><Link to={`${url}/general`}>General Info</Link></li>
+                    <li><Link to={`${url}/plot`}>Plot</Link></li>
+                    <li><Link to={`${url}/awards`}>Awards</Link></li>
+                    <li><Link to={`/tv`}>Search</Link></li>
+                </ul>
+                <Switch>
+                    <Route path={`${path}/general`}>
+                        <General />
+                    </Route>
+                    <Route path={`${path}/plot`}>
+                        <Plot />
+                    </Route>
+                    <Route path={`${path}/awards`}>
+                        <Awards />
+                    </Route>
+                    <Route path={`${path}`}>
+                        <General />
+                    </Route>
+                </Switch>
+    
+    
+    
+            </Page>
+        );
+    }
 }
 
 export default TVShowResults;

@@ -44,8 +44,10 @@ function Button(props) {
 }
 */
 
-function TVSearchPage({ query }) {
+function TVSearchPage({ query, squery, equery }) {
   const [inputQuery, setinputQuery] = useState(query || "");
+  const [inputQueryS, setinputQueryS] = useState(squery || "");
+  const [inputQueryE, setinputQueryE] = useState(equery || "");
 
   const history = useHistory();
 
@@ -54,10 +56,20 @@ function TVSearchPage({ query }) {
       <h1>Search TV Shows</h1>
       <Form onSubmit={(e) => {
         e.preventDefault();
-        history.push(`/tv/results?q=${inputQuery}`);
+        if(inputQueryS && inputQueryE) {
+          history.push(`/tv/results?q=${inputQuery}-${inputQueryS}-${inputQueryE}`);
+        }else if(inputQueryS ) {
+          history.push(`/tv/results?q=${inputQuery}-${inputQueryS}`);
+        } else {
+          history.push(`/tv/results?q=${inputQuery}`);
+        }
       }}>
           <p>TV Show Title*</p>
           <input type="text" value={inputQuery} onChange={(e) => setinputQuery(e.target.value)} /><br />
+          <p>Season</p>
+          <input type="text" value={inputQueryS} onChange={(e) => setinputQueryS(e.target.value)} />
+          <p>Episode</p>
+          <input type="text" value={inputQueryE} onChange={(e) => setinputQueryE(e.target.value)} /><br />
           <Button>Search</Button>
           <p>*required</p>
         
