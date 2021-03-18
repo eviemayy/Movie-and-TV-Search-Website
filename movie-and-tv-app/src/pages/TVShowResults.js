@@ -79,6 +79,7 @@ function TVShowResults({ query }) {
     const [TVShow, setTVShow] = useState({});
     const [seasons, setSeason] = useState(false);
     const [episodes, setEpisode] = useState(false);
+    const [found, setFound] = useState(true);
     //const [TVShow, setTVShow] = useState([]);
     //const history = useHistory();
 
@@ -110,11 +111,11 @@ function TVShowResults({ query }) {
                     console.log("ep");
                 }
                 if(tokens[1] && tokens[2]){
-                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&season=${tokens[1]}&episode=${tokens[2]}`, { signal: controller.signal });
+                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&type=series&season=${tokens[1]}&episode=${tokens[2]}`, { signal: controller.signal });
                 }else if(tokens[1]){
-                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&season=${tokens[1]}`, { signal: controller.signal });
+                    res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&type=series&season=${tokens[1]}`, { signal: controller.signal });
                 }else{
-                res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}`, { signal: controller.signal });
+                res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${tokens[0]}&type=series`, { signal: controller.signal });
                 }
 
                 //res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&t=${query}`, { signal: controller.signal });
@@ -143,6 +144,9 @@ function TVShowResults({ query }) {
 
                 console.log("response body: ", responseBody);
                 console.log("body.title: ", responseBody.Title);
+                if(responseBody.Response === "False"){
+                    setFound(false);
+                }
                 setTVShow(responseBody);
 
             }
@@ -266,14 +270,31 @@ function TVShowResults({ query }) {
             </div>
         );
     }
-
-    if(seasons && episodes){
+    if(!found){
         return (
             <Page>
                 <ul>
+                    <li><Link to={`/tv`}>Back</Link></li>
+                </ul>
+                <Switch>
+                    <Route path={`${path}/general`}>
+                        <h1>Show not found.</h1>
+                    </Route>
+                    <Route path={`${path}`}>
+                        <h1>Show not found.</h1>
+                        <img src={TVShow.Poster} alt={TVShow.Title}></img>
+                    </Route>
+                </Switch>
+            </Page>
+        );
+    
+    }else if(seasons && episodes){
+        return (
+            <Page>
+                <ul>
+                    <li><Link to={`/tv`}>Back</Link></li>
                     <li><Link to={`${url}/general`}>General Info</Link></li>
                     <li><Link to={`${url}/plot`}>Plot</Link></li>
-                    <li><Link to={`/tv`}>Search</Link></li>
                 </ul>
                 <Switch>
                     <Route path={`${path}/general`}>
@@ -296,8 +317,8 @@ function TVShowResults({ query }) {
         return (
             <Page>
                 <ul>
+                    <li><Link to={`/tv`}>Back</Link></li>
                     <li><Link to={`${url}/general`}>General Info</Link></li>
-                    <li><Link to={`/tv`}>Search</Link></li>
                 </ul>
                 <Switch>
                     <Route path={`${path}/general`}>
@@ -313,10 +334,10 @@ function TVShowResults({ query }) {
         return (
             <Page>
                 <ul>
+                    <li><Link to={`/tv`}>Back</Link></li>
                     <li><Link to={`${url}/general`}>General Info</Link></li>
                     <li><Link to={`${url}/plot`}>Plot</Link></li>
                     <li><Link to={`${url}/awards`}>Awards</Link></li>
-                    <li><Link to={`/tv`}>Search</Link></li>
                 </ul>
                 <Switch>
                     <Route path={`${path}/general`}>
