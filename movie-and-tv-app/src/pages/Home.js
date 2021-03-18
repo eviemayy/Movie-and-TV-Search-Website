@@ -63,7 +63,7 @@ function Home() {
                 <WebsiteTitle>iWannaWatch</WebsiteTitle>
                 <DescriptionBox>
                     <p>Welcome! Use this website to look up information about movies and tv shows. Navigate to the Movies tab to search movies and use the
-            TV Shows tab to search through TV Shows.</p>
+            TV Shows tab to search through TV Shows. </p>
                 </DescriptionBox>
             </div>
 

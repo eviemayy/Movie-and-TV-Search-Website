@@ -11,6 +11,7 @@ import MovieSearchPage from "./pages/MovieSearchPage";
 import TvSearchPage from './pages/TvSearchPage';
 import Oops from './pages/Oops';
 import MovieResults from './pages/MovieResults';
+import TVShowResults from './pages/TVShowResults';
 
 const globalStyles = css`
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Roboto&display=swap');
@@ -35,8 +36,11 @@ function App() {
         <Route exact path="/movies">
           <MovieSearchPage query={useQueryString().q} />
         </Route>
-        <Route path="/tv">
+        <Route exact path="/tv">
           <TvSearchPage query={useQueryString().q}/>
+        </Route>
+        <Route path="/tv/results">
+          <TVShowResults query={useQueryString().q}/>
         </Route>
         <Route path="/movies/results">
           <MovieResults query={useQueryString().q} />
